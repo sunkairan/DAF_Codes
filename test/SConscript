@@ -1,0 +1,21 @@
+Import("env")
+
+source = ['test_ff.c']
+lib = File("../build/libbatscore.a")
+
+#env.Program('test_dist', "test_dist.cpp", LIBS=[lib])
+env.Program('test_ff', source, LIBS=[lib])
+env.Program('test_bats', "test_bats.cpp", LIBS=[lib])
+env.Program('test_vand', 'test_vand.c', LIBS=[lib])
+
+env.Program('perf_enc', "perf_enc.c", LIBS=[lib])
+
+# env.Program('perf_dec', "perf_dec.c", LIBS=[lib])
+env.Program('perf_ff', "perf_ff.c", LIBS=[lib])
+env.Program('perf_dec', "perf_dec.cpp", LIBS=[lib])
+
+testname = ['test_ff', 'test_bats', 'test_vand', 'perf_enc', 'perf_ff', 'perf_dec']
+
+runtest = env.Command(target="run.dummy", source=testname, action="cd test; python test_all.py")
+env.AlwaysBuild(runtest)
+

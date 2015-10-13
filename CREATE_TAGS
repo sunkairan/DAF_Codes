@@ -1,0 +1,4 @@
+#!/bin/sh
+rm `pwd`/TAGS
+find src test -name '*.h' -exec etags -o `pwd`/TAGS --append {} \; -print
+find src test -name '*.cpp' -exec etags -o `pwd`/TAGS --append {} \; -print

@@ -1,0 +1,55 @@
+#include "DelayEnc.h"
+
+#include <algorithm>
+
+DelayEncoder::DelayEncoder(int K, int T, double codeRate, PosType windowSize, ModeType mode, SymbolType *input) : 
+        BatsEncoder(1, K, T, input, true),
+        codeRate(codeRate),
+        windowSize(windowSize),
+        mode(mode),
+        currentPos(0.0)
+{
+}
+
+void DelayEncoder::genBatchWithKey(SymbolType **batch, KeyType key){
+    int i;
+
+    int Tout = packetSize + (batchSize * fieldOrder / SYMBOLSIZE);//need to know header len
+	
+    for (i = 0; i < batchSize; i++) {
+		//reset packet buffer
+        memset(batch[i], 0 , Tout);
+		//set header for coding vector
+		curPacket->SetForWriteWOKey(batch[i]);
+		curPacket->SetHeader(i);
+		//save location
+		payload[i] = curPacket->GetPayload();
+	}
+    
+	builder->Build(key, (int)currentPos, windowSize, mode);
+}
+
+SymbolType *DelayEncoder::genPacket() {
+        
+	    if (genPktCounter == batchSize) {
+		    genPktCounter = 0;
+		    id = genBatch(batchWithoutId);
+	    }
+
+	    saveIDInPacket(batch[genPktCounter], &id);
+	    //cout << "encoder: batch_id = " << id << endl;
+	    SymbolType *delayPacket = saveDelayInfoInPacket(batch[genPktCounter++]);
+	    currentPos += codeRate;
+	    return delayPacket;
+
+}
+
+SymbolType *DelayEncoder::saveDelayInfoInPacket(SymbolType *orgPacket){
+    int len = packetSize + batchSize*fieldOrder/SYMBOLSIZE + sizeof(KeyType);
+    SymbolType *delayPacket = new SymbolType[len + 2*sizeof(PosType) + sizeof(ModeType)];
+    PosType pos = (PosType) currentPos;
+    memcpy(delayPacket, (SymbolType*) (&pos), sizeof(PosType));
+    memcpy(delayPacket + sizeof(PosType), (SymbolType*) (&windowSize), sizeof(PosType));
+    memcpy(delayPacket + 2*sizeof(PosType), (SymbolType*) (&mode), sizeof(ModeType));
+    memcpy(delayPacket + 2*sizeof(PosType) + sizeof(ModeType), orgPacket, len);
+}

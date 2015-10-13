@@ -1,0 +1,33 @@
+Import('env')
+
+source = ['BatchEnc.cpp',
+          'BatchDec.cpp',
+          'NCCoder.cpp',
+          'NIODecoder.cpp',
+          'CircularBuf.c',
+          'ff.c',
+          'init.c',
+          'vand.c',
+          'FiniteField.cpp',
+		  'Precode.cpp',
+		  'InactDecoder.cpp',
+		  'VariableNode.cpp']
+
+static_bats = env.StaticLibrary('batscore', source)
+shared_bats = env.SharedLibrary('batscore', source)
+
+env.Command("../release/" + str(static_bats[0]), static_bats, Copy("$TARGET", "$SOURCE"))
+env.Command("../release/" + str(shared_bats[0]), shared_bats, Copy("$TARGET", "$SOURCE"))
+
+# copy file to 'test'
+env.Command("../test/bats.py", "../release/bats.py", Copy("$TARGET", "$SOURCE"))
+#env.Command("../test/rankDist.txt", "../release/rankDist.txt", Copy("$TARGET", "$SOURCE"))
+#env.Command("../test/ddM16m8r92TO.txt", "../release/ddM16m8r92TO.txt", Copy("$TARGET", "$SOURCE"))
+
+env.Command("../test/" + str(static_bats[0]), static_bats, Copy("$TARGET", "$SOURCE"))
+env.Command("../test/" + str(shared_bats[0]), shared_bats, Copy("$TARGET", "$SOURCE"))
+
+
+
+env.Install("/usr/lib", [static_bats, shared_bats])
+env.Alias('install', ['/usr/lib'])

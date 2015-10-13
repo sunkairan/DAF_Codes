@@ -1,0 +1,170 @@
+Delay-Aware Fountain (DAF) Codes and BATched Sparse Code (BATS) Core Library
+
+README
+Kairan Sun, 30 Sep, 2015.
+
+
+Scope and non-scope
+
+This document guides the reader through basic setup and testing of the BATS Core
+Library, as well as using it for development. It does NOT covers integration with
+the network layer.
+
+
+Building the library
+
+Currently, building on Mac and Linux are supported. Prerequisites includes the
+SCons utility as a substitute for make (Download from http://www.scons.org/), and
+preferrably a CPU that supports SSE2.
+
+To build, simply issue the following command at the distribution's root directory:
+	$ scons
+
+This will compile the sources, generate both the static and dynamic libraries, and
+then run a series of end-to-end test cases automatically. For your reference, a
+sample log file of the build process's output is included at /build_log.txt.
+
+To cleanup/reset the build, issue the command
+	$ scons -c
+
+If SSE2 is not supported on your config, then use the following command instead:
+	$ scons --nosse=NOSSE
+
+To see other options, use:
+	$ scons --help
+The section "Local Options:" in the displayed help text should be the most relevant.
+
+
+Testing the library
+
+The suite of end-to-end test programs are located in /test. For convinence, a
+wrapper script /test/test_all.py is provided that will execute all tests one by one,
+printing their results along the way. To run this test, do:
+	$ cd test/
+	$ python test_all.py
+Note that the script requires a python installation (http://www.python.org/) to run.
+
+For C/C++ programmer, the most useful test is the program /test/test_bats (with
+source /test/test_bats.cpp). This program will simulate a two-hop network
+	source (with encoder) ---> intermediate node (with recoder) ---> sink (with decoder)
+with a link loss rate of 0.1 on both hop (i.e. 10% of the packets are randomly
+dropped). It will simulate transmitting a file with some fixed byte pattern
+through this network in an offline manner, and at the end of the session will
+verify whether the file is correctly decoded.
+
+The program can be invoked in two ways; in the first way, a parameter specifying
+the size of the file (with KB as unit) is supplied by the user, and recoding
+will be done on a batch-by-batch basis; in the second way, no paramater is given,
+and a "file" with default size of 1024KB = 1MB will be transmitted with recoding
+done on a packet-by-packet (i.e. online) basis.
+
+Example:
+	$ ./test_bats 10240
+Will test with a 10MB file, that will take about 1-2 seconds.
+
+Other notes:
+- The library must be built through the command in the last section for the test
+  to be built.
+- The build process involve copying files and scripts around. Hence, do not delete
+  seemingly unneeded files; they may lead to the build script failing.
+- The BATS library need to read in a degree distribution file to work; the filename
+  is hardcoded to be "ddM16m8r92TO.txt" in the same directory as the program is run.
+
+
+Developing with BATS Core Library in C/C++
+
+First, include the appropiate header files. They are:
+
+//Supporting files
+#include <Utilities.h>
+#include <bats.h>
+
+#include <BatchEnc.h> //Encoder
+#include <BatchDec.h> //Decoder
+#include <NCCoder.h> //Recoder
+
+Then, create the objects for encoder, decoder, and recoder. The C interfaces are
+
+BatsEncoder* BatsEncoder_new(int M, int K, int T, SymbolType *input);
+BatsDecoder* BatsDecoder_new(int M, int K, int T, SymbolType *output);
+NCCoder* NCCoder_new(int batchSize, int packetSize);
+
+All of which returns a pointer to the created objects. The parameters are:
+M, batchSize - Batch size: how many packets to mix and recode each time.
+T, packetSize - Size of the packet *payload* in bytes.
+K - Number of packet. A special parameter of BATS code. For users, the invariant
+    is that K*T >= size of file in bytes. If file size is not an integer multiple
+    of T, then zero padding have to be used, and the user need to make the receiver
+    aware of the actual file size by himself.
+input, output - Pointer to the memory buffer/C-style-array holding the file.
+
+Note that SymbolType is simply a typedef for unsigned char.
+
+Next, setup the encoder and decoder's degree distribution by calling:
+
+void BatsEncoder_selectDegree(BatsEncoder* encoder);
+void BatsDecoder_selectDegree(BatsDecoder* decoder);
+
+And the file for degree distribution will be read as noted in the last section.
+
+Note that the degree distribution should ideally match the channel loss rate for
+best performance; a set of prepared degree distribution file is included in
+/aux/deg_dist_data for use. The number in the filename indicate the average
+"received rank" out of the usual batch size of 16 - as an example:
+	Udegdist09.txt
+Is used for a channel that receive 9 out of 16 packets on average.
+
+To generate packets at Encoder, simply call
+
+SymbolType* BatsEncoder_genPacket(BatsEncoder* encoder);
+
+Repeatedly. The generated packets will have the following format:
++-----+----------------+------------------------------------------------+
+| Bid | Coding Vector  | Payload                                        |
++-----+----------------+------------------------------------------------+
+Where Bid stands for Batch ID, and is 2 byte long.
+The coding vector is used for network coding, and its length is equal to
+the batch size (i.e. 16 bytes for default).
+The payload is the content, and its length is as configured in parameter above.
+
+Since the returned pointer points to an internal buffer of the Encoder, user
+should copy data from it only.
+
+The recoder is a thin class/function class with the main function
+
+void NCCoder_genPacket(NCCoder* recoder, SymbolType *dstPacket, SymbolType *cache, int cacheSize);
+
+All memories are managed by user. cache points to a buffer of size L*cacheSize, where
+L is the *total* length of a generated packet. It holds all packets in the same
+batch the intermediate node has so far received. dstPacket points to a buffer
+of size L. Each time this function is called, one recoded packet will be generated.
+
+On the decoder side, one calls
+
+void BatsDecoder_receivePacket(BatsDecoder* decoder, uint8_t *batch);
+
+To receive a single packet. ("batch" here is a naming mistake; it actually points
+to a buffer holding a single packet)
+
+Decoding will happen in the background as packets are received. To check
+whether the file has been decoded, use
+
+int BatsDecoder_complete(BatsDecoder* decoder, double decRatio);
+
+Where decRatio should be set to 1.0 for almost all practical use cases.
+Decoding is done if 1 is returned, 0 otherwise. When it is done, the decoded
+file will be automatically written to the output buffer given when creating
+the BatsDecoder object.
+
+
+Appendix - Directory Structures
+
+/aux - Auxiliary and supporting tools
+/aux/deg_dist_data - Data files of universal degree distributions
+/aux/degree_dist, /aux/channel_cap - MATLAB scripts
+/build - Temp folder holding compiled units
+/doc - Technical Documents
+/release - Compiled static and dynamic libraries are stored here
+/src - Source files
+/test - Test scripts/programs
+

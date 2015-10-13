@@ -1,0 +1,69 @@
+scons: Reading SConscript files ...
+scons: done reading SConscript files.
+scons: Building targets ...
+clang++ -o build/BatchDec.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/BatchDec.cpp
+clang++ -o build/BatchDec.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/BatchDec.cpp
+clang++ -o build/BatchEnc.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/BatchEnc.cpp
+clang++ -o build/BatchEnc.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/BatchEnc.cpp
+clang++ -o build/CircularBuf.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/CircularBuf.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/CircularBuf.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/CircularBuf.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/FiniteField.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/FiniteField.cpp
+clang++ -o build/FiniteField.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/FiniteField.cpp
+clang++ -o build/InactDecoder.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/InactDecoder.cpp
+clang++ -o build/InactDecoder.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/InactDecoder.cpp
+clang++ -o build/NCCoder.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/NCCoder.cpp
+clang++ -o build/NCCoder.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/NCCoder.cpp
+clang++ -o build/NIODecoder.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/NIODecoder.cpp
+clang++ -o build/NIODecoder.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/NIODecoder.cpp
+clang++ -o build/Precode.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/Precode.cpp
+clang++ -o build/Precode.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/Precode.cpp
+clang++ -o build/VariableNode.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/VariableNode.cpp
+clang++ -o build/VariableNode.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/VariableNode.cpp
+clang++ -o build/ff.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/ff.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/ff.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/ff.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/init.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/init.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/init.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/init.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/vand.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/vand.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+ar rc build/libbatscore.a build/BatchEnc.o build/BatchDec.o build/NCCoder.o build/NIODecoder.o build/CircularBuf.o build/ff.o build/init.o build/vand.o build/FiniteField.o build/Precode.o build/InactDecoder.o build/VariableNode.o
+ranlib build/libbatscore.a
+clang++ -o build/vand.os -c -O3 -msse2 -mstackrealign -fPIC -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc src/vand.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o build/libbatscore.dylib -dynamiclib build/BatchEnc.os build/BatchDec.os build/NCCoder.os build/NIODecoder.os build/CircularBuf.os build/ff.os build/init.os build/vand.os build/FiniteField.os build/Precode.os build/InactDecoder.os build/VariableNode.os
+Copy("release/libbatscore.a", "build/libbatscore.a")
+Copy("release/libbatscore.dylib", "build/libbatscore.dylib")
+Copy("test/bats.py", "release/bats.py")
+Copy("test/libbatscore.a", "build/libbatscore.a")
+Copy("test/libbatscore.dylib", "build/libbatscore.dylib")
+clang++ -o test/perf_dec.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc test/perf_dec.cpp
+clang++ -o test/perf_dec test/perf_dec.o build/libbatscore.a
+clang++ -o test/perf_enc.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc test/perf_enc.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o test/perf_enc test/perf_enc.o build/libbatscore.a
+clang++ -o test/perf_ff.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc test/perf_ff.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o test/perf_ff test/perf_ff.o build/libbatscore.a
+clang++ -o test/test_ff.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc test/test_ff.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o test/test_ff test/test_ff.o build/libbatscore.a
+clang++ -o test/test_bats.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc test/test_bats.cpp
+clang++ -o test/test_bats test/test_bats.o build/libbatscore.a
+clang++ -o test/test_vand.o -c -O3 -msse2 -mstackrealign -DSSE_DEBUG -DSSE_BOOST -DPRINT_DEBUG -DERROR_DEBUG -Isrc test/test_vand.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+clang++ -o test/test_vand test/test_vand.o build/libbatscore.a
+cd test; python test_all.py
+****************************************
+./test_ff								 Passed
+./test_bats								 Passed
+./test_bats 10240						 Passed
+python test_case_1.py lnc.pdf			 Passed
+python test_case_2.py lnc.pdf			 Passed
+python test_case_3.py lnc.pdf			 Passed
+scons: done building targets.
+

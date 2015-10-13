@@ -1,0 +1,719 @@
+
+src/PrecodeLayout.h,893
+#define PRECODELAYOUT_H2,24
+class PrecodeLayout 4,49
+		PrecodeLayout(PrecodeLayout::PrecodeLayout6,80
+		int dataPacketNum,PrecodeLayout::dataPacketNum9,298
+		int dataPacketNum, ldpcNum,PrecodeLayout::ldpcNum9,298
+		int dataPacketNum, ldpcNum, hdpcNum;PrecodeLayout::hdpcNum9,298
+		int additionalPerminactNum;PrecodeLayout::additionalPerminactNum10,368
+		int GetDataPacketNum(PrecodeLayout::GetDataPacketNum14,419
+		int GetldpcNum(PrecodeLayout::GetldpcNum15,476
+		int GethdpcNum(PrecodeLayout::GethdpcNum16,521
+		int GetAdditionalPerminactNum(PrecodeLayout::GetAdditionalPerminactNum17,566
+		inline int SparseToActual(PrecodeLayout::SparseToActual20,674
+		inline int PerminactToActual(PrecodeLayout::PerminactToActual27,874
+		inline int ActualToInterlaced(PrecodeLayout::ActualToInterlaced34,1146
+		inline bool inPerminactPart(PrecodeLayout::inPerminactPart44,1477
+
+src/types.h,295
+#define __TYPE__H__2,20
+typedef unsigned char uint8_t;12,109
+typedef unsigned short uint16_t;13,140
+typedef unsigned int uint32_t;14,173
+typedef unsigned long long uint64_t;15,204
+typedef unsigned char symbol_t;18,249
+typedef int status_t;19,281
+typedef unsigned short batch_id_t;21,304
+
+src/VariableNode.h,921
+#define VARIABLENODE_H2,23
+class VariableNode{VariableNode7,90
+	static SymbolType** inactCoef_ActualBuffer;VariableNode::inactCoef_ActualBuffer9,119
+	static int totalNum;VariableNode::totalNum10,164
+    int id;VariableNode::id12,194
+    int degree;VariableNode::degree13,206
+    int inactSeq;VariableNode::inactSeq14,222
+    BEdge *edgeHead;VariableNode::edgeHead15,240
+    bool decoded;VariableNode::decoded17,266
+    SymbolType* packet;VariableNode::packet18,284
+    SymbolType* inactCoef;VariableNode::inactCoef19,308
+	static void SetBuffer(VariableNode::SetBuffer22,387
+	static void FreeBuffer(VariableNode::FreeBuffer26,564
+    VariableNode(VariableNode::VariableNode31,679
+    VariableNode(VariableNode::VariableNode35,893
+    ~VariableNode(VariableNode::~VariableNode40,1092
+    inline void addEdge(VariableNode::addEdge49,1228
+    inline bool active(VariableNode::active55,1356
+
+src/vand.h,136
+#define __VAND__H__2,20
+struct vandermond_matrix 5,42
+	int *data;data6,69
+	int rows;7,81
+	int columns;8,92
+	int (*get)get10,107
+
+src/CheckNode.h,1214
+#define CHECKNODE_H2,20
+namespace vtype18,283
+class CheckNode 25,378
+    SymbolType** packet;CheckNode::packet28,465
+    SymbolType** codingVec;CheckNode::codingVec30,525
+    SymbolType** inactCoef;CheckNode::inactCoef32,581
+    int codingRank;CheckNode::codingRank35,653
+    int numRec;CheckNode::numRec37,707
+    int id;CheckNode::id40,757
+	Partition<BEdge*> edges;CheckNode::edges42,774
+    int batchSize;CheckNode::batchSize45,821
+    bool inQueue;CheckNode::inQueue47,845
+    bool decoded;CheckNode::decoded48,863
+    bool missingRank;CheckNode::missingRank50,882
+    CheckNode(CheckNode::CheckNode52,966
+    ~CheckNode(CheckNode::~CheckNode66,1418
+    inline BEdge* addEdge(CheckNode::addEdge81,1825
+    inline void addInact(CheckNode::addInact102,2385
+    inline bool codingVecIndepend(CheckNode::codingVecIndepend110,2607
+    inline void subsInPacket(CheckNode::subsInPacket126,3046
+    inline void subsDecodedVar(CheckNode::subsDecodedVar131,3288
+    void receivePacket(CheckNode::receivePacket143,3803
+    void receivePacket_AfterBatchSolved(CheckNode::receivePacket_AfterBatchSolved179,5217
+	void SaveGlobalConstraint(CheckNode::SaveGlobalConstraint218,6762
+
+src/RawPacket.h,958
+#define RAWPACKET_H_2,21
+class RawPacket 8,156
+		RawPacket(RawPacket::RawPacket10,183
+		~RawPacket(RawPacket::~RawPacket14,477
+		void SetForRead(RawPacket::SetForRead18,527
+		void SetForWriteWOKey(RawPacket::SetForWriteWOKey38,1260
+		void SetHeader(RawPacket::SetHeader42,1382
+		const SymbolType* GetCodingVector(RawPacket::GetCodingVector49,1576
+		SymbolType* GetPayload(RawPacket::GetPayload50,1664
+		KeyType GetID(RawPacket::GetID51,1711
+		SymbolType* rawpacketPtr;RawPacket::rawpacketPtr53,1779
+		SymbolType* codingVector;RawPacket::codingVector54,1832
+		SymbolType* payload;RawPacket::payload55,1860
+		KeyType id;RawPacket::id56,1883
+		int nSymInHead;RawPacket::nSymInHead58,1900
+		int nFFInSym;RawPacket::nFFInSym59,1918
+		int fieldOrder;RawPacket::fieldOrder60,1934
+		SymbolType maskDec,RawPacket::maskDec62,1955
+		SymbolType maskDec, maskEnc;RawPacket::maskEnc62,1955
+		int batchSize;RawPacket::batchSize64,1989
+
+src/DelayEnc.h,329
+#define DELAYENC_H_2,20
+using namespace std;14,227
+class DelayEncoder 17,250
+    double codeRate;DelayEncoder::codeRate19,300
+    int windowSize;DelayEncoder::windowSize20,339
+    double currentPos;DelayEncoder::currentPos21,359
+    int mode;DelayEncoder::mode22,382
+	~DelayEncoder(DelayEncoder::~DelayEncoder26,501
+
+src/PacketBuffer.h,690
+#define PACKETBUFFER_H2,23
+class PacketBuffer 7,90
+		PacketBuffer(PacketBuffer::PacketBuffer9,120
+		~PacketBuffer(PacketBuffer::~PacketBuffer14,374
+		void SetBuffer(PacketBuffer::SetBuffer21,510
+		inline SymbolType* GetPacket(PacketBuffer::GetPacket35,877
+		int GetPacketSize(PacketBuffer::GetPacketSize40,1013
+		SymbolType** GetCheckPackets(PacketBuffer::GetCheckPackets41,1058
+		int packetNum,PacketBuffer::packetNum44,1141
+		int packetNum, checkNum,PacketBuffer::checkNum44,1141
+		int packetNum, checkNum, packetSize;PacketBuffer::packetSize44,1141
+		SymbolType** packets;PacketBuffer::packets46,1191
+		SymbolType** checkPackets;PacketBuffer::checkPackets47,1215
+
+src/util/Utilities.h,1637
+#define UTILITIES_H_2,21
+using namespace std;18,282
+#define SYMBOLSIZE 21,305
+#define MAX_DEGREE 22,326
+typedef unsigned char SymbolType;24,351
+typedef unsigned short KeyType;25,385
+typedef unsigned long uint32;26,417
+typedef unsigned short uint16;27,447
+inline void saveIDInPacket(46,930
+inline KeyType getIDFromPacket(54,1171
+class DistSampler 64,1435
+    double* accu;DistSampler::accu65,1455
+    int n;DistSampler::n66,1473
+    DistSampler(DistSampler::DistSampler68,1492
+    inline int sample(DistSampler::sample81,1771
+    ~DistSampler(DistSampler::~DistSampler93,1976
+    int getMaxDegree(DistSampler::getMaxDegree98,2053
+inline T** mallocMat(141,3006
+inline void freeMat(151,3241
+inline T** newIdentityMat(160,3401
+inline void setIdentityMatrix(170,3617
+class ArrayQueue 179,3769
+    T* data;ArrayQueue::data181,3797
+    int head;ArrayQueue::head182,3810
+    int tail;ArrayQueue::tail183,3824
+    int bufsize;ArrayQueue::bufsize184,3838
+    ArrayQueue(ArrayQueue::ArrayQueue187,3864
+    ~ArrayQueue(ArrayQueue::~ArrayQueue192,3971
+    inline int size(ArrayQueue::size196,4021
+    inline void empty(ArrayQueue::empty199,4079
+    inline bool isNonEmpty(ArrayQueue::isNonEmpty204,4147
+    inline void push(ArrayQueue::push208,4212
+    inline T pop(ArrayQueue::pop212,4282
+class WrongDegree{WrongDegree241,4995
+    WrongDegree(WrongDegree::WrongDegree243,5022
+    WrongDegree(WrongDegree::WrongDegree244,5042
+    int getDegree(WrongDegree::getDegree245,5094
+    int degree;WrongDegree::degree247,5146
+void printMat(259,5386
+inline vector<double>* ReadFileDouble(296,6335
+
+src/util/MersenneTwister.h,1644
+#define MERSENNETWISTER_H59,2898
+class MTRand 70,3122
+	typedef unsigned long uint32;MTRand::uint3273,3153
+	enum { N MTRand::N75,3230
+	enum { SAVE MTRand::SAVE76,3281
+	enum { SAVE = N MTRand::N76,3281
+	enum { M MTRand::M79,3348
+	uint32 state[MTRand::state81,3390
+	uint32 *pNext;MTRand::pNext82,3428
+	int left;MTRand::left83,3480
+	uint32 hiBit(MTRand::hiBit128,5454
+	uint32 loBit(MTRand::loBit129,5521
+	uint32 loBits(MTRand::loBits130,5588
+	uint32 mixBits(MTRand::mixBits131,5656
+	uint32 magic(MTRand::magic133,5747
+	uint32 twist(MTRand::twist135,5831
+inline MTRand::uint32 MTRand::hash(142,6064
+inline void MTRand::initialize(167,6660
+inline void MTRand::reload(184,7175
+inline void MTRand::seed(200,7623
+inline void MTRand::seed(207,7754
+inline void MTRand::seed(242,8894
+inline MTRand::MTRand(265,9522
+inline MTRand::MTRand(268,9589
+inline MTRand::MTRand(271,9693
+inline MTRand::MTRand(274,9731
+inline MTRand::uint32 MTRand::randInt(284,9935
+inline MTRand::uint32 MTRand::randInt(300,10301
+inline double MTRand::rand(319,10729
+inline double MTRand::rand(322,10811
+inline double MTRand::randExc(325,10881
+inline double MTRand::randExc(328,10966
+inline double MTRand::randDblExc(331,11042
+inline double MTRand::randDblExc(334,11140
+inline double MTRand::rand53(337,11222
+inline double MTRand::randNorm(343,11383
+inline double MTRand::operator()(MTRand::operator()359,11813
+inline void MTRand::save(364,11869
+inline void MTRand::load(373,12060
+inline std::ostream& operator<<(383,12270
+inline std::istream& operator>>(391,12491
+inline MTRand& MTRand::operator=(MTRand::operator=401,12750
+
+src/util/CircularBuf.h,307
+#define CIRCULARBUF_H_2,23
+struct ThreadedCircularBuf19,275
+	int len;21,304
+	int N;22,343
+	SymbolType* content;24,404
+	volatile int start;26,427
+	volatile int end;27,487
+	volatile int empty;28,506
+	pthread_cond_t c;32,618
+	pthread_mutex_t m;33,637
+	pthread_t thread_id;34,657
+	char* name;35,679
+
+src/util/ff.h,96
+#define __FINITE_FIELD__2,25
+static inline int ff_add(16,189
+static inline int ff_sub(21,250
+
+src/util/FiniteField.h,1654
+#define FINITEFIELD_H_9,104
+using namespace std;16,228
+class FiniteField 22,293
+    int order;FiniteField::order25,356
+    int size;FiniteField::size26,371
+    static const int prim_poly[FiniteField::prim_poly31,457
+    static const int nw[FiniteField::nw32,492
+    static const int nwm1[FiniteField::nwm133,520
+    int *divTable;FiniteField::divTable35,551
+    int *mulTable;FiniteField::mulTable36,570
+    int *logTable;FiniteField::logTable37,589
+    int *expTable;FiniteField::expTable38,608
+    int *mulTable2;FiniteField::mulTable240,628
+    FiniteField(FiniteField::FiniteField46,700
+    FiniteField(FiniteField::FiniteField52,790
+    void setOrder(FiniteField::setOrder58,870
+    ~FiniteField(FiniteField::~FiniteField65,982
+    inline int add(FiniteField::add71,1056
+    inline int sub(FiniteField::sub76,1145
+    inline int mul(FiniteField::mul81,1234
+    inline int div(FiniteField::div86,1344
+    inline int mulCMP(FiniteField::mulCMP91,1454
+    inline void incr(FiniteField::incr114,2045
+    inline void mulvc(FiniteField::mulvc118,2124
+    inline void mulvc(FiniteField::mulvc127,2321
+    inline void mulvcCMP(FiniteField::mulvcCMP136,2527
+    inline void mulvcCMP(FiniteField::mulvcCMP145,2721
+    inline void addvv(FiniteField::addvv164,3237
+    inline void addvvc(FiniteField::addvvc175,3520
+    inline void addvvcCMP(FiniteField::addvvcCMP186,3839
+    inline int innerprod(FiniteField::innerprod205,4480
+    inline void mulmcvCMP(FiniteField::mulmcvCMP216,4754
+    inline void addvmcvCMP(FiniteField::addvmcvCMP223,4995
+    inline void mulmcv(FiniteField::mulmcv229,5201
+
+src/NIODecoder.h,275
+#define NIODECODER_H_2,22
+struct ThreadArg15,230
+	int M,17,249
+	int M, K,17,249
+	int M, K, T,17,249
+	int M, K, T, F;17,249
+	struct ThreadedCircularBuf* buf;18,266
+	SymbolType* out;19,300
+	int* numDec;20,318
+	int* numReceived;21,395
+	int (*callback)callback22,488
+
+src/DelayDec.h,1743
+#define DELAYDEC_H_2,20
+using namespace std;25,386
+class DelayDecoder 28,409
+    KeyType batchID;DelayDecoder::batchID32,482
+    int nloss1,DelayDecoder::nloss135,538
+    int nloss1,nloss2,DelayDecoder::nloss235,538
+    int nloss1,nloss2,nloss3;DelayDecoder::nloss335,538
+    int nRecPkg;DelayDecoder::nRecPkg36,568
+    int nSavedPkg;DelayDecoder::nSavedPkg38,590
+    int nDecoded;DelayDecoder::nDecoded42,691
+    int nDecodedPkg;DelayDecoder::nDecodedPkg45,756
+    int complete_flag;DelayDecoder::complete_flag47,778
+    int nRecBatch;DelayDecoder::nRecBatch51,845
+    CheckNode* batchSet[DelayDecoder::batchSet52,864
+    vector<VariableNode> var;DelayDecoder::var54,939
+    ArrayQueue<CheckNode*> *decQueue;DelayDecoder::decQueue56,970
+    int receiRedun;DelayDecoder::receiRedun59,1072
+    int step_for_packets;DelayDecoder::step_for_packets60,1130
+    int accumulate_packets;DelayDecoder::accumulate_packets61,1156
+    int num_inact;DelayDecoder::num_inact62,1184
+    int maxInact;DelayDecoder::maxInact64,1204
+    SymbolType** GH;DelayDecoder::GH67,1299
+    SymbolType** invMat;DelayDecoder::invMat68,1320
+	InactDecoder* inactDecoder;DelayDecoder::inactDecoder71,1387
+	DecPacketBuilder* packBuilder;DelayDecoder::packBuilder73,1448
+DelayDecoder(DelayDecoder::DelayDecoder76,1493
+    ~DelayDecoder(DelayDecoder::~DelayDecoder179,5205
+    void setOutputPacket(DelayDecoder::setOutputPacket194,5512
+    inline int complete(DelayDecoder::complete198,5591
+    int numInact(DelayDecoder::numInact206,5827
+    bool inactDecoding(DelayDecoder::inactDecoding211,5922
+    bool readyForInact(DelayDecoder::readyForInact225,6326
+    int getDecodedPkg(DelayDecoder::getDecodedPkg243,6744
+
+src/Precode.h,571
+#define PRECODE_H2,18
+using namespace std;11,134
+class Precode 15,178
+		Precode(Precode::Precode17,203
+		~Precode(Precode::~Precode28,680
+		const PrecodeLayout& layout;Precode::layout35,903
+		int dataPacketNum,Precode::dataPacketNum37,979
+		int dataPacketNum, ldpcNum,Precode::ldpcNum37,979
+		int dataPacketNum, ldpcNum, hdpcNum;Precode::hdpcNum37,979
+		int additionalPerminactNum;Precode::additionalPerminactNum38,1018
+		int keyHDPC;Precode::keyHDPC40,1051
+		MTRand* psrand;Precode::psrand41,1066
+		int ldpcVarDegree;Precode::ldpcVarDegree43,1087
+
+src/BatchDec.h,1757
+#define BATCHDEC_H_2,20
+using namespace std;25,404
+class BatsDecoder 28,427
+    KeyType batchID;BatsDecoder::batchID32,499
+    int nloss1,BatsDecoder::nloss135,555
+    int nloss1,nloss2,BatsDecoder::nloss235,555
+    int nloss1,nloss2,nloss3;BatsDecoder::nloss335,555
+    int nRecPkg;BatsDecoder::nRecPkg36,585
+    int nSavedPkg;BatsDecoder::nSavedPkg38,607
+    int nDecoded;BatsDecoder::nDecoded42,708
+    int nDecodedPkg;BatsDecoder::nDecodedPkg45,773
+    int complete_flag;BatsDecoder::complete_flag47,795
+    int nRecBatch;BatsDecoder::nRecBatch51,862
+    CheckNode* batchSet[BatsDecoder::batchSet52,881
+    vector<VariableNode> var;BatsDecoder::var54,956
+    ArrayQueue<CheckNode*> *decQueue;BatsDecoder::decQueue56,987
+    int receiRedun;BatsDecoder::receiRedun59,1089
+    int step_for_packets;BatsDecoder::step_for_packets60,1147
+    int accumulate_packets;BatsDecoder::accumulate_packets61,1173
+    int num_inact;BatsDecoder::num_inact62,1201
+    int maxInact;BatsDecoder::maxInact64,1221
+    SymbolType** GH;BatsDecoder::GH67,1316
+    SymbolType** invMat;BatsDecoder::invMat68,1337
+	InactDecoder* inactDecoder;BatsDecoder::inactDecoder71,1404
+	DecPacketBuilder* packBuilder;BatsDecoder::packBuilder73,1465
+BatsDecoder(BatsDecoder::BatsDecoder76,1510
+    ~BatsDecoder(BatsDecoder::~BatsDecoder179,5253
+    void setOutputPacket(BatsDecoder::setOutputPacket194,5559
+    inline int complete(BatsDecoder::complete198,5638
+    int numInact(BatsDecoder::numInact206,5874
+    bool inactDecoding(BatsDecoder::inactDecoding211,5969
+    bool readyForInact(BatsDecoder::readyForInact225,6373
+    int getDecodedPkg(BatsDecoder::getDecodedPkg243,6791
+typedef struct BatsDecoder BatsDecoder;261,7142
+
+src/bats.h,27
+#define __BATS_INIT__2,22
+
+src/BatchEnc.h,714
+#define BATCHENC_H_2,20
+using namespace std;15,247
+class BatsEncoder 18,270
+    KeyType batchID;BatsEncoder::batchID22,342
+    int genPktCounter;BatsEncoder::genPktCounter23,363
+    SymbolType **batch;BatsEncoder::batch25,387
+    SymbolType **batchWithoutId;BatsEncoder::batchWithoutId26,411
+	SymbolType** payload;BatsEncoder::payload29,505
+    KeyType id;BatsEncoder::id32,567
+	EncPacketBuilder* packBuilder;BatsEncoder::packBuilder35,617
+    BatsEncoder(BatsEncoder::BatsEncoder38,660
+	~BatsEncoder(BatsEncoder::~BatsEncoder61,1486
+    SymbolType *genPacket(BatsEncoder::genPacket73,1759
+    KeyType genBatch(BatsEncoder::genBatch88,2122
+typedef struct BatsEncoder BatsEncoder;144,3763
+
+src/platform.h,252
+#define __PLATFORM_H__2,23
+static inline uint64_t read_tsc(12,146
+static inline uint64_t cycles_elapsed(21,273
+static inline void d_printf(27,390
+static inline void d_error(39,556
+static inline void d_log(49,719
+static inline void x_swap(60,901
+
+src/NCCoder.h,243
+#define	NCCODER_H8,106
+class NCCoder 12,145
+    int L;NCCoder::L14,169
+    int Q;NCCoder::Q15,211
+    MTRand *psrand;NCCoder::psrand18,305
+    NCCoder(NCCoder::NCCoder22,335
+    ~NCCoder(NCCoder::~NCCoder30,644
+    NCCoder;40,840
+
+src/BEdge.h,408
+#define BEDGE_H2,16
+class BEdge{BEdge11,178
+    VariableNode* vnode;BEdge::vnode14,220
+    CheckNode *cnode;BEdge::cnode16,263
+    int seqInCheck;BEdge::seqInCheck17,285
+    SymbolType* g;BEdge::g20,419
+    SymbolType* gh;BEdge::gh24,654
+    BEdge *nextInVar;BEdge::nextInVar26,680
+    BEdge(BEdge::BEdge28,707
+    ~BEdge(BEdge::~BEdge33,882
+    inline void addCoef(BEdge::addCoef39,980
+
+src/DecPacketBuilder.h,479
+#define DECPACKETBUILDER_H2,27
+using namespace std;9,126
+class DecPacketBuilder 11,148
+		DecPacketBuilder(DecPacketBuilder::DecPacketBuilder13,206
+		void BuildPacket(DecPacketBuilder::BuildPacket14,336
+		void setCheckNode(DecPacketBuilder::setCheckNode31,861
+		CheckNode* node;DecPacketBuilder::node34,958
+		vector<VariableNode>& var;DecPacketBuilder::var35,977
+		MTRand& psrand;DecPacketBuilder::psrand36,1006
+		int batchSize;DecPacketBuilder::batchSize38,1039
+
+src/EncPacketBuilder.h,393
+#define ENCPACKETBUILDER_H2,27
+class EncPacketBuilder 11,160
+		EncPacketBuilder(EncPacketBuilder::EncPacketBuilder13,218
+		void BuildPacket(EncPacketBuilder::BuildPacket15,386
+		PacketBuffer& buf;EncPacketBuilder::buf32,882
+		MTRand& psrand;EncPacketBuilder::psrand33,932
+		SymbolType** payload;EncPacketBuilder::payload34,950
+		int packetSize;EncPacketBuilder::packetSize36,989
+
+src/BatsBasic.h,1328
+#define	BATSBASIC_H9,118
+#define BATSDECODER_MAXBATCH 28,430
+class BatsBasic 32,489
+    double precodeRate;BatsBasic::precodeRate34,518
+    int batchSize;BatsBasic::batchSize36,575
+    int packetNum;BatsBasic::packetNum37,608
+    int packetSize;BatsBasic::packetSize38,675
+    int checkNum;BatsBasic::checkNum39,721
+    int totalNum;BatsBasic::totalNum40,766
+    int ldpcNum;BatsBasic::ldpcNum43,835
+    int hdpcNum;BatsBasic::hdpcNum44,878
+	int additionalPerminactNum;BatsBasic::additionalPerminactNum45,921
+    int ldpcVarDegree;BatsBasic::ldpcVarDegree47,955
+    int piDegree;BatsBasic::piDegree48,1005
+    int fieldSizeMinOne;BatsBasic::fieldSizeMinOne51,1083
+    int fieldOrder;BatsBasic::fieldOrder52,1108
+    struct vandermond_matrix *vand_matrix;BatsBasic::vand_matrix55,1151
+	RawPacket *curPacket;BatsBasic::curPacket59,1231
+	PrecodeLayout *layout;BatsBasic::layout61,1283
+	Precode *precode;BatsBasic::precode63,1336
+	PacketBuffer *buf;BatsBasic::buf65,1384
+	BatchBuilder *builder;BatsBasic::builder67,1433
+    BatsBasic(BatsBasic::BatsBasic72,1605
+    ~BatsBasic(BatsBasic::~BatsBasic135,3824
+    void selectDegree(BatsBasic::selectDegree144,3939
+    void setDegreeDist(BatsBasic::setDegreeDist150,4094
+    inline int getSmallestBid(BatsBasic::getSmallestBid154,4204
+
+src/PacketSampler.h,787
+#define PACKETSAMPLER_H2,24
+class PacketSampler 7,100
+		PacketSampler(PacketSampler::PacketSampler9,131
+		~PacketSampler(PacketSampler::~PacketSampler18,474
+		void Sample(PacketSampler::Sample22,525
+		void SampleSparsePart(PacketSampler::SampleSparsePart63,1873
+		void SamplePerminactPart(PacketSampler::SamplePerminactPart66,2022
+		int* sampledID;PacketSampler::sampledID70,2163
+		const PrecodeLayout& layout;PacketSampler::layout72,2206
+		int dataPacketNum,PacketSampler::dataPacketNum75,2337
+		int dataPacketNum, ldpcNum,PacketSampler::ldpcNum75,2337
+		int dataPacketNum, ldpcNum, hdpcNum;PacketSampler::hdpcNum75,2337
+		int additionalPerminactNum;PacketSampler::additionalPerminactNum76,2407
+		void RandomCombination(PacketSampler::RandomCombination80,2497
+
+src/IPacketBuilder.h,121
+#define IPACKETBUILDER_H2,25
+class IPacketBuilder 5,78
+	virtual ~IPacketBuilder(IPacketBuilder::~IPacketBuilder8,197
+
+src/BatchBuilder.h,685
+#define BATCHBUILDER_H2,23
+using namespace std;13,203
+class BatchBuilder 15,225
+		BatchBuilder(BatchBuilder::BatchBuilder17,255
+		void Build(21,541
+		~BatchBuilder(40,1311
+		void SetPacketBuilder(44,1354
+		IPacketBuilder* GetPacketBuilder(45,1430
+		double *ComputeCdf(ComputeCdf48,1536
+		int ComputeWindowSize(79,2527
+		void SetDegreeDist(86,2726
+		void SetDegreeDist(91,2830
+		void SetDegreeDist(96,2969
+		MTRand& GetRand(111,3419
+		IPacketBuilder* packBuilder;113,3468
+		PacketSampler sampler;114,3499
+		MTRand psrand;115,3524
+		DistSampler* dist;116,3541
+		int maxSparseDegree,118,3577
+		int maxSparseDegree, perminactDegree;118,3577
+		int batchSize;119,3617
+
+src/InactDecoder.h,1164
+#define INACTDECODER_H2,23
+using namespace std;10,130
+class InactDecoder 12,152
+		InactDecoder(InactDecoder::InactDecoder14,182
+		~InactDecoder(InactDecoder::~InactDecoder21,612
+		SymbolType* GetYNewSlot(InactDecoder::GetYNewSlot28,759
+		SymbolType* GetCNewSlot(InactDecoder::GetCNewSlot29,834
+		int GetNumInactVar(InactDecoder::GetNumInactVar31,912
+		int GetNumConstraint(InactDecoder::GetNumConstraint32,994
+		void ResetNewSlot(InactDecoder::ResetNewSlot35,1060
+		void RegisterGlobalConstraint(InactDecoder::RegisterGlobalConstraint36,1163
+		void AddInactCount(InactDecoder::AddInactCount37,1218
+		bool Saturated(InactDecoder::Saturated41,1328
+		int numConstraint,InactDecoder::numConstraint47,1536
+		int numConstraint, numInactVar,InactDecoder::numInactVar47,1536
+		int numConstraint, numInactVar, maxInactVar;InactDecoder::maxInactVar47,1536
+		int hdpcNum,InactDecoder::hdpcNum50,1623
+		int hdpcNum, packetSize;InactDecoder::packetSize50,1623
+		SymbolType** Y;InactDecoder::Y53,1670
+		SymbolType** C;InactDecoder::C54,1710
+		SymbolType** Cspan;InactDecoder::Cspan56,1819
+		Precode& precode;InactDecoder::precode58,1844
+
+src/Partition.h,2432
+#define PARTITION_H2,20
+using namespace std;8,99
+class Partition 14,239
+	Partition(Partition::Partition17,281
+	void insert(Partition::insert19,373
+	void changeClass(Partition::changeClass26,560
+	int getClass(Partition::getClass49,1258
+	int size(Partition::size50,1316
+	int sizeCls(Partition::sizeCls51,1347
+	TypeT get(Partition::get53,1407
+	ClassIterator<TypeT> beginCls(Partition::beginCls55,1460
+	ClassIterator<TypeT> endCls(Partition::endCls58,1548
+	RangeIterator<TypeT> begin(Partition::begin61,1659
+	RangeIterator<TypeT> end(Partition::end64,1769
+	int m_Size;Partition::m_Size70,1958
+	const int m_nClass;Partition::m_nClass71,1971
+	vector<TypeT> actualBuf;Partition::actualBuf72,2023
+	vector<Partition::vector73,2049
+	vector<pair<int,int> > classIDandLoc;Partition::classIDandLoc73,2049
+	vector<vector<int> > classMember;Partition::classMember74,2173
+class RangeIterator 78,2328
+	RangeIterator(RangeIterator::RangeIterator81,2420
+	RangeIterator(RangeIterator::RangeIterator83,2555
+	RangeIterator<TypeT>& operator=(RangeIterator::operator=86,2715
+	bool operator==(RangeIterator::operator==95,2917
+	bool operator!=(RangeIterator::operator!=98,3115
+	TypeT& operator*(RangeIterator::operator*103,3222
+	TypeT* operator->(RangeIterator::operator->106,3283
+	RangeIterator<TypeT>& operator++(RangeIterator::operator++111,3363
+	RangeIterator<TypeT> operator++(RangeIterator::operator++115,3442
+	Partition<TypeT>& m_part;RangeIterator::m_part121,3570
+	const int m_start,RangeIterator::m_start122,3597
+	const int m_start, m_end;RangeIterator::m_end122,3597
+	int m_index;RangeIterator::m_index123,3624
+class ClassIterator 127,3667
+	ClassIterator(ClassIterator::ClassIterator130,3759
+	ClassIterator(ClassIterator::ClassIterator131,3851
+	ClassIterator(ClassIterator::ClassIterator133,3963
+	ClassIterator<TypeT>& operator=(ClassIterator::operator=136,4108
+	bool operator==(ClassIterator::operator==144,4292
+	bool operator!=(ClassIterator::operator!=147,4469
+	TypeT& operator*(ClassIterator::operator*152,4576
+	TypeT* operator->(ClassIterator::operator->156,4695
+	ClassIterator<TypeT>& operator++(ClassIterator::operator++162,4833
+	ClassIterator<TypeT> operator++(ClassIterator::operator++166,4912
+	Partition<TypeT>& m_part;ClassIterator::m_part172,5040
+	const int m_classID;ClassIterator::m_classID173,5067
+	int m_index;ClassIterator::m_index174,5089
+
+src/InactDecoder.cpp,99
+bool InactDecoder::NewGlobalConstraintIndependent(9,147
+bool InactDecoder::TryInactDecode(24,602
+
+src/NCCoder.cpp,88
+NCCoder* NCCoder_new(6,65
+void NCCoder_genPacket(7,164
+void NCCoder::genPacket(9,316
+
+src/util/FiniteField.cpp,439
+const int FiniteField::prim_poly[FiniteField::prim_poly3,26
+const int FiniteField::nw[FiniteField::nw12,196
+const int FiniteField::nwm1[FiniteField::nwm113,314
+void FiniteField::init(17,469
+void FiniteField::finalize(28,696
+int FiniteField::createLogTables(51,1113
+int FiniteField::createMulintables(99,2080
+int FiniteField::rankM(221,5209
+int FiniteField::GaussianSolve(326,7966
+int FiniteField::GaussianElimination(349,8575
+
+src/util/CircularBuf.cpp,123
+void bufInit(12,196
+void bufWrite(55,1217
+int bufRead(87,2005
+void bufFree(117,2703
+double bufGetFilledRatio(141,3300
+
+src/vand.cpp,260
+static struct vandermond_matrix matrix;5,55
+static int get(10,169
+void init_vandermond_matrix(21,407
+void destroy_vandermond_matrix(51,987
+struct vandermond_matrix *get_vandermond_matrix(get_vandermond_matrix58,1066
+void print_vandermond_matrix(66,1210
+
+src/DelayEnc.cpp,237
+DelayEncoder::DelayEncoder(5,49
+void DelayEncoder::genBatchWithKey(14,321
+SymbolType *DelayEncoder::genPacket(DelayEncoder::genPacket32,839
+SymbolType *DelayEncoder::saveDelayInfoInPacket(DelayEncoder::saveDelayInfoInPacket47,1249
+
+src/BatchDec.cpp,723
+BatsDecoder* BatsDecoder_new(6,70
+int BatsDecoder_complete(8,187
+int BatsDecoder_getDecoded(9,291
+void BatsDecoder_rankDist(10,377
+void BatsDecoder_receivePacket(11,464
+void BatsDecoder_setDegreeDist(13,653
+void BatsDecoder_selectDegree(14,786
+int BatsDecoder_readyForInact(16,869
+int BatsDecoder_inactDecoding(21,966
+void BatsDecoder_logRankDist(26,1062
+int BatsDecoder_numInact(30,1153
+void BatsDecoder::tryPushDecQueue(40,1281
+void BatsDecoder::receivePacket(50,1679
+CheckNode* BatsDecoder::initNewBatch(121,3753
+void BatsDecoder::decodeBatch(138,4333
+bool BatsDecoder::inactDec(218,6959
+bool BatsDecoder::addInact(253,8937
+void BatsDecoder::rankDist(344,11915
+void BatsDecoder::logRankDist(368,12475
+
+src/testPartition.cpp,68
+const int numCls 7,84
+int main(11,151
+void PrintContainer(45,708
+
+src/VariableNode.cpp,181
+SymbolType** VariableNode::inactCoef_ActualBuffer;9,161
+int VariableNode::totalNum;10,212
+void VariableNode::saveDecoded(12,241
+void VariableNode::substituteInactivePart(22,568
+
+src/BatchEnc.cpp,313
+BatsEncoder* BatsEncoder_new(5,49
+SymbolType* BatsEncoder_genPacket(7,161
+void BatsEncoder_setDegreeDist(9,334
+void BatsEncoder_selectDegree(10,467
+int BatsEncoder_getSmallestBid(12,550
+void BatsEncoder::genCheckPkg(17,650
+void BatsEncoder::setInputPackets(21,728
+void BatsEncoder::genBatchWithKey(26,837
+
+src/Precode.cpp,123
+void Precode::MultiplyQ(8,142
+void Precode::GenerateCheckPackets(60,1478
+void Precode::GenerateHDPCConstraints(157,5110
+
+src/platform.cpp,0
+
+src/NIODecoder.cpp,139
+void* NonBlockingDecoder_Threadfunc(3,25
+struct ThreadedCircularBuf* NonBlockingDecoder_new(45,958
+void NonBlockingDecoder_wait(69,1755
+
+src/DelayDec.cpp,329
+void DelayDecoder::tryPushDecQueue(11,113
+void DelayDecoder::receivePacket(21,512
+CheckNode* DelayDecoder::initNewBatch(92,2587
+void DelayDecoder::decodeBatch(109,3168
+bool DelayDecoder::inactDec(189,5795
+bool DelayDecoder::addInact(224,7774
+void DelayDecoder::rankDist(315,10753
+void DelayDecoder::logRankDist(339,11314
+
+test/test_bats.cpp,127
+float LOSS_RATE 18,259
+int run_packet_mode(20,283
+int run_batch_mode(84,1679
+void setup_degree(149,3145
+int main(177,3589
+
+test/test_dist.cpp,15
+int main(6,84
+
+test/perf_dec.cpp,127
+float LOSS_RATE 19,277
+int run_packet_mode(21,301
+int run_batch_mode(85,1701
+void setup_degree(150,3171
+int main(178,3615
+
+test/test_delay.cpp,127
+float LOSS_RATE 18,259
+int run_packet_mode(20,283
+int run_batch_mode(84,1681
+void setup_degree(149,3149
+int main(155,3214
