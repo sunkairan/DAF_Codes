@@ -1,7 +1,8 @@
+*.o
+*~
 /build/
 /results/
 /schfile/
 /release/
 /temp/
-*.o
-*~
+/udp/
