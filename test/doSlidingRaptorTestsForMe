@@ -1,0 +1,73 @@
+#!/bin/sh
+# config of the tests
+# it will do the combination of all configs
+# "15 20 25 30 35 40 45 50 55"
+# "20 25 30 35 40 45"
+windowSizes="20"
+# "0.7 0.725 0.75 0.775 0.8 0.825 0.85 0.875 0.9 0.925 0.95 0.975 1.0"
+codeRates="0.85  0.875 0.9 0.925 0.95 0.975 1.0"
+multiplier="10"
+# "fun3 nonopt fix block fount"
+# schemes="_L1_F0.75 _L1_F0 _L5_F0.75 _L5_F0 _L10_F0.75 _L10_F0 _L15_F0.75 _L15_F0 _L20_F0.75 _L20_F0 _L1_F0.5 _L1_F1 _L5_F0.5 _L5_F1 _L10_F0.5 _L10_F1 _L15_F0.5 _L15_F1 _L20_F0.5 _L20_F1"
+# schemes="sraptor_33_0_5 sraptor_33_1_5 sraptor_97_3_6 sraptor_194_6_6 sraptor_291_9_9"
+schemes="fount raptor"
+
+# "foreman mobile akiyo bus coastguard football news stefan"
+seqNames="foreman"
+repeat=5
+tempResultFileName="tempResult.txt"
+resultPrefix="Results_"
+tempResultFileName2="tempInTimeResult.txt"
+resultPrefix2="InTimeResults_"
+
+# some variables (default nums)
+dt=1
+lossRate="0.0"
+
+# input files
+
+
+# do all tests
+for seqName in $seqNames
+do
+
+for scheme in $schemes
+do
+
+resultName="${resultPrefix}${seqName}_${scheme}_LR${lossRate}_dt${dt}.txt"
+resultName2="${resultPrefix2}${seqName}_${scheme}_LR${lossRate}_dt${dt}.txt"
+echo " "
+echo "============================= New test ============================="
+echo "Results of ${seqName}, ${scheme}, loss rate = ${lossRate}, dt = ${dt} " > $resultName
+echo "windowSize\tcodeRate\tdecodeRatio\t${repeat}" >> $resultName
+
+echo "InTimeResults of ${seqName}, ${scheme}, loss rate = ${lossRate}, dt = ${dt} " > $resultName2
+echo "windowSize\tcodeRate\tdecodeRatio\t${repeat}" >> $resultName2
+
+for windowSize in $windowSizes
+do
+
+for codeRate in $codeRates
+do
+
+printf "${windowSize}\t${codeRate}\t" >> $resultName
+printf "${windowSize}\t${codeRate}\t" >> $resultName2
+
+for r in $( seq ${repeat} )
+do
+
+    echo "Computing seq ${seqName}, using ${scheme}, window size = ${windowSize}, dt = ${dt}, code rate = ${codeRate}, repeat for $r time ..."
+    rm $tempResultFileName
+    rm $tempResultFileName2
+    "../test/test_pred_delay" ${seqName} ${lossRate} ${windowSize} ${dt} ${codeRate} ${scheme} ${r} ${multiplier}> "/dev/null"
+    cat $tempResultFileName >> $resultName
+    cat $tempResultFileName2 >> $resultName2
+
+done
+echo " " >> $resultName
+echo " " >> $resultName2
+
+done
+done
+done
+done

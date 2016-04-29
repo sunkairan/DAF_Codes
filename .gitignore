@@ -3,3 +3,5 @@
 /schfile/
 /release/
 /temp/
+*.o
+*~
