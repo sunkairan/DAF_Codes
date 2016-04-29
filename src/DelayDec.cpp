@@ -5,14 +5,14 @@
 
 
 /* definitions of DelayDecoder */
-DelayDecoder::DelayDecoder(int K, int T, SymbolType *output):
-	BatsDecoder(1, K, T, output, true, 0, K-1)
+DelayDecoder::DelayDecoder(int K, int T, SymbolType *output, LDPCStruct* ldpcin):
+	BatsDecoder(1, K, T, output, ldpcin, 0, K-1)
 {
 
 }
 
-DelayDecoder::DelayDecoder(int K, int T, SymbolType *output, long evalFrom, long evalTo,int randseed):
-	BatsDecoder(1, K, T, output, true, evalFrom, evalTo,randseed)
+DelayDecoder::DelayDecoder(int K, int T, SymbolType *output, LDPCStruct* ldpcin, long evalFrom, long evalTo, int randseed):
+	BatsDecoder(1, K, T, output, ldpcin, evalFrom, evalTo,randseed)
 {
 
 }

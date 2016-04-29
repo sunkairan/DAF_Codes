@@ -24,8 +24,8 @@ private:
     //long evalTo;
     
 public:
-	DelayDecoder(int K, int T, SymbolType *output);
-	DelayDecoder(int K, int T, SymbolType *output,long evalFrom, long evalTo, int randseed=0);
+	DelayDecoder(int K, int T, SymbolType *output, LDPCStruct* ldpcin);
+	DelayDecoder(int K, int T, SymbolType *output, LDPCStruct* ldpcin, long evalFrom, long evalTo, int randseed=0);
 
     ~DelayDecoder(){
         for(int i=0;i<BATSDECODER_MAXBATCH;i++){

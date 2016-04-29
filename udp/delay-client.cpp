@@ -12,6 +12,7 @@
 #include <Utilities.h>
 #include <DelayEnc.h>
 #include <DelayDec.h>
+#include <LDPCStruct.h>
 
 #include <bats.h>
 
@@ -248,7 +249,8 @@ int main(int argc, char *argv[])
 	fclose(fileScheduler);
 
 	/* setup encoder */
-	DelayEncoder *encoder = new DelayEncoder(pkt_num, pkt_size, input, evalFrom, evalTo, seed);
+	LDPCStruct* encodeLDPC = new LDPCStruct(pkt_num, 97, 3, 6, 0, 0);
+	DelayEncoder *encoder = new DelayEncoder(pkt_num, pkt_size, input, encodeLDPC, evalFrom, evalTo, seed);
 	setup_degree(encoder);
 
 

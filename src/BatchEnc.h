@@ -45,8 +45,8 @@ public:
 	long evalTo;
 public:
   
-    BatsEncoder(int M, int K, int T, SymbolType *input, bool noPrecode=false, long evalFrom = 0, long evalTo = 0, int randseed=0) :
-    	BatsBasic(M,K,T,noPrecode,randseed),
+    BatsEncoder(int M, int K, int T, SymbolType *input, LDPCStruct* ldpcin = NULL, long evalFrom = 0, long evalTo = 0, int randseed=0) :
+    	BatsBasic(M,K,T,ldpcin,randseed),
 		evalFrom(evalFrom),
 		evalTo(evalTo),
 		fromP(0),
@@ -55,18 +55,19 @@ public:
         // init batch ID
         batchID = getSmallestBid();
         // Added by Kairan - add warm-up/cool-down periods
-        if(evalFrom<0) evalFrom = 0;
-		if(evalFrom>=packetNum) evalFrom = packetNum-1;
-		if(evalTo  <0) evalTo = 0;
-		if(evalTo  >=packetNum) evalTo   = packetNum-1;
+        // if(evalFrom<0) evalFrom = 0;
+		// if(evalFrom>=packetNum) evalFrom = packetNum-1;
+		// if(evalTo  <0) evalTo = 0;
+		// if(evalTo  >=packetNum) evalTo   = packetNum-1;
         if(evalTo > evalFrom) {
         	batchID += evalFrom; // warm-up
         	batchID += (packetNum-evalTo-1); //cool-down
         	memset(input, 'A',evalFrom*packetSize); // padding with 'A'
-        	memset(input+evalTo+1, 'A',(packetNum-evalTo-1)*packetSize);
+        	memset(input+evalTo*packetSize+1, 'A',(packetNum-evalTo)*packetSize-1);
         }
         else{
-        	evalTo = evalFrom = 0;
+        	evalFrom = 0; // means all packets are evaluated
+        	evalTo = totalNum - 1;
         }
 		
 		

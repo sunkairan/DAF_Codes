@@ -22,6 +22,7 @@
 #include "PacketBuffer.h"
 
 #include "BatchBuilder.h"
+#include "LDPCStruct.h"
 
 #include <algorithm>
 
@@ -51,6 +52,9 @@ protected:
     int fieldSizeMinOne;
     int fieldOrder;
 
+    // LDPC check nodes for sliding window, Added by Kairan
+    LDPCStruct* ldpc;
+
 #ifdef USE_VANDERMOND
     struct vandermond_matrix *vand_matrix;
 #endif
@@ -69,18 +73,22 @@ protected:
 	//int maxInact; // the maximum allowed number of inactivation 
 	//int maxRedun; // the maximum redundancy used to decode inactive packets
 public:
-    BatsBasic(int M, int K, int T, bool noPrecode=false, int randseed = 0) : batchSize(M), packetNum(K), packetSize(T) {
-        precodeRate = 0.01;
-        
-        if(noPrecode) {
-        	//ldpcNum = (int) (precodeRate * packetNum + sqrt(2*packetNum));
-        	ldpcNum = 0;//3;
-			hdpcNum = 2;
-			ldpcVarDegree = 0;//3;
+    BatsBasic(int M, int K, int T, LDPCStruct* ldpcin = NULL, int randseed = 0) :
+    	batchSize(M), packetNum(K), packetSize(T),
+		precodeRate(0.01),
+		ldpc(ldpcin)  // nativeN, interv, groupSize, span, hdpcNum, PINum
+		//ldpc(packetNum, 97, 0, 5, 0, 0)  // no LDPC precode
+		//ldpc(packetNum, packetNum, (int) (precodeRate * packetNum + sqrt(2*packetNum)), (int) (precodeRate * packetNum + sqrt(2*packetNum)), 0, 0)
+	{
+        if(ldpc) {
+        	ldpcNum = ldpc->getLdpcNum();
+        	ldpcVarDegree = ldpc->getLdpcVarDegree();
+        	//ldpcNum = (int) (precodeRate * packetNum + sqrt(2*packetNum)); ldpcVarDegree = 3;
+			hdpcNum = ldpc->getHdpcNum();
 			checkNum = ldpcNum+hdpcNum;
 			totalNum = packetNum + checkNum;
-			additionalPerminactNum = 0;
-			piDegree = 0;
+			additionalPerminactNum = ldpc->getPermInactNum();
+			piDegree = 2;
 			piDegree = min(piDegree, hdpcNum + additionalPerminactNum);
         }
         else {
@@ -128,7 +136,7 @@ public:
 		buf = new PacketBuffer(packetNum, checkNum, packetSize);
 
 		curPacket = new RawPacket(nSymInHead, nFFInSym, fieldOrder, maskEnc, maskDec, batchSize);
-		layout = new PrecodeLayout(packetNum, ldpcNum, hdpcNum, additionalPerminactNum);
+		layout = new PrecodeLayout(packetNum, ldpcNum, hdpcNum, additionalPerminactNum, ldpc);
 		precode = new Precode(*layout, ldpcVarDegree);
 		
 		builder = new BatchBuilder(*layout, packetNum + ldpcNum - additionalPerminactNum, piDegree, batchSize,randseed);

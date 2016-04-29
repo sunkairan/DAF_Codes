@@ -19,7 +19,7 @@ class PacketSampler {
 			delete[] sampledID;
 		}
 		
-		void Sample(int degree, int permdeg, MTRand* psrand, PosType startPos, PosType windowSize, double *CDF) {
+		void Sample(int degree, int permdeg, MTRand* psrand, PosType windowSize, double *CDF, int* actualSeq) {
 		    int i;
     		// Kairan : unequal sampling
 		    char *sampled = new char[windowSize];
@@ -43,7 +43,7 @@ class PacketSampler {
 		            }
 		        } while(sampled[lb]);
 		        sampled[lb] = 1;
-		        sampledID[i] = lb + (int)startPos;
+		        sampledID[i] = actualSeq[lb]; // Modified by Kairan for sliding window Raptor
 		    }
 		
             
@@ -53,9 +53,10 @@ class PacketSampler {
 			RandomCombination(hdpcNum + additionalPerminactNum, permdeg, psrand, degree);//Perminact part
 			
 			//Convert to actual IDs
-			for (i = 0; i < degree; i++) {
-				sampledID[i] = layout.SparseToActual(sampledID[i]);
-			}
+			// Deleted by Kairan -- already actual IDs for sliding window Raptor codes
+			//for (i = 0; i < degree; i++) {
+			//	sampledID[i] = layout.SparseToActual(sampledID[i]);
+			//}
 			for (i = degree; i < degree + permdeg; i++) {
 				sampledID[i] = layout.PerminactToActual(sampledID[i]);
 			}

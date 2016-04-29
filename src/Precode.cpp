@@ -32,8 +32,9 @@ void Precode::MultiplyQ(SymbolType** output, SymbolType** input, int row, bool C
 	for (int i = 0; i < Qcol; i++){
 		idVec[i] = i;
 	}
+
 	for (int k = 1; k < Qrow; k++) {
-		for (int i = 0; i < deg; i++) {
+		for (int i = 0; i < min(deg,Qcol); i++) { // Adjusted by Kairan for handling hdpc<2
 			int j = psrand->randInt(Qcol - 1 - i) + i;
 			swap(idVec[i], idVec[j]);
 			
@@ -90,21 +91,38 @@ void Precode::GenerateCheckPackets(PacketBuffer& buf) {
     /* Step 1: add contribution of B' = B_A * C_A + B_I * C_I to LDPC buffer, and compute C_H */
 
     //add contribution of B_A * C_A to LDPC buffer
-    for (int k = 0; k < activeBoundary; k++) {
+
+    /*for (int k = 0; k < activeBoundary; k++) {
         for (int d = 0; d < ldpcVarDegree; d++) {
             FF.addvv(ldpcBuf[(k % ldpcNum + d * (int)(k / ldpcNum) + d) % ldpcNum], buf.GetPacket(k), packetSize);
         }
+    }*/
+
+    // Added by Kairan Sun for sliding window Raptor
+    // read LDPC links from the LDPCstruct class
+    if(ldpcNum > 0){
+		for (int i = 0; i < activeBoundary; i++) {
+			for(set<int>::iterator it = layout.GetLdpc()->native2ldpc[i].begin(); it != layout.GetLdpc()->native2ldpc[i].end(); ++it){
+				FF.addvv(ldpcBuf[(*it)], buf.GetPacket(i), packetSize);
+			}
+		}
     }
+
     //add contribution of B_I * C_I to LDPC buffer
-    for (int j = 0; j < ldpcNum; j++){
-        for (int i = 0; i < 2; i++){
-            int k = (j+i) % perminactNum;//The concat-along-col matrix [C_I; C_H] is circulent
-            if (k < additionalPerminactNum){
-                FF.addvv(ldpcBuf[j],buf.GetPacket(activeBoundary+k),packetSize);
-            } else {
-                CH[j][k-additionalPerminactNum] = 1;//as side effect, save coefficient of C_H
-            }
-        }
+    if(perminactNum > 0) {
+		for (int j = 0; j < ldpcNum; j++){
+			for (int i = 0; i < 2; i++){
+				int k = (j+i) % perminactNum;//The concat-along-col matrix [C_I; C_H] is circulent
+				if (k < additionalPerminactNum){
+					// Added by Kairan Sun for sliding window Raptor
+					if(!(layout.GetLdpc()->addNewEdgeBetweenNativeAndLdpc(activeBoundary+k,j))) continue;
+					// end of addition
+					FF.addvv(ldpcBuf[j],buf.GetPacket(activeBoundary+k),packetSize);
+				} else {
+					CH[j][k-additionalPerminactNum] = 1;//as side effect, save coefficient of C_H
+				}
+			}
+		}
     }
 	//Notice that now LDPC store B' exactly
 	

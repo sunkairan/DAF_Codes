@@ -16,7 +16,7 @@ ALLUTIL = $(_ALLUTIL:%=$(SDIR)/util/%)
 
 _OBJ = util/FiniteField.o BatchEnc.o BatchDec.o NCCoder.o NIODecoder.o util/ff.o\
 util/CircularBuf.o init.o vand.o Precode.o InactDecoder.o VariableNode.o\
-DelayEnc.o DelayDec.o
+LDPCStruct.o DelayEnc.o DelayDec.o
 
 
 

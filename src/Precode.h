@@ -14,7 +14,8 @@ struct VariableNode;
 
 class Precode {
 	public:
-		Precode(const PrecodeLayout& lay, int ldpcVarDegree) : layout(lay), ldpcVarDegree(ldpcVarDegree) {
+		Precode(const PrecodeLayout& lay, int ldpcVarDegree) :
+			layout(lay), ldpcVarDegree(ldpcVarDegree) {
 			//Save a local copy of the parameters
 			dataPacketNum = layout.GetDataPacketNum();
 			ldpcNum = layout.GetldpcNum();
@@ -37,6 +38,7 @@ class Precode {
 		int dataPacketNum, ldpcNum, hdpcNum;
 		int additionalPerminactNum;
 		
+
 		int keyHDPC;
 		MTRand* psrand;
 		

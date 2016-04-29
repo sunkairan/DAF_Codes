@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-DelayEncoder::DelayEncoder(int K, int T, SymbolType *input,long evalFrom, long evalTo, int randseed) :
-        BatsEncoder(1, K, T, input, true,evalFrom,evalTo,randseed),
+DelayEncoder::DelayEncoder(int K, int T, SymbolType *input, LDPCStruct* ldpcin, long evalFrom, long evalTo, int randseed) :
+        BatsEncoder(1, K, T, input, ldpcin,evalFrom,evalTo,randseed),
 		sentNPacket(0)
 {
 }

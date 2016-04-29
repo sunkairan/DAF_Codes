@@ -22,7 +22,7 @@ private:
     //ModeType mode;
 public:
   
-    DelayEncoder(int K, int T, SymbolType *input,long evalFrom, long evalTo,int randseed=0);
+    DelayEncoder(int K, int T, SymbolType *input, LDPCStruct* ldpcin, long evalFrom, long evalTo, int randseed=0);
 	~DelayEncoder() {
 		free(payload);
 		delete packBuilder;

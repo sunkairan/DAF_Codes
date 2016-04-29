@@ -11,6 +11,7 @@
 #include <Utilities.h>
 #include <DelayEnc.h>
 #include <DelayDec.h>
+#include <LDPCStruct.h>
 
 #include <bats.h>
 
@@ -204,7 +205,8 @@ int main(int argc, char *argv[])
 
 
 	/*setup decoder */
-	DelayDecoder *decoder = new DelayDecoder(pkt_num, pkt_size, output, evalFrom, evalTo, seed);
+	LDPCStruct* decodeLDPC = new LDPCStruct(pkt_num, 97, 3, 6, 0, 0);
+	DelayDecoder *decoder = new DelayDecoder(pkt_num, pkt_size, output, decodeLDPC, evalFrom, evalTo, seed);
 	setup_degree(decoder);
 
 	// main function

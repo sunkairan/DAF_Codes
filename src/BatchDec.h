@@ -89,8 +89,8 @@ protected:
     
 public:
 
-BatsDecoder(int M, int K, int T, SymbolType *output, bool noPrecode=false, long evalFrom = 0, long evalTo = 0, int randseed=0):
-	BatsBasic(M,K,T,noPrecode,randseed),
+BatsDecoder(int M, int K, int T, SymbolType *output, LDPCStruct* ldpcin = NULL, long evalFrom = 0, long evalTo = 0, int randseed=0):
+	BatsBasic(M,K,T,ldpcin,randseed),
 	evalFrom(evalFrom),
 	evalTo(evalTo),
 	nDecodedPkginEval(0),
@@ -113,10 +113,6 @@ BatsDecoder(int M, int K, int T, SymbolType *output, bool noPrecode=false, long 
         nDecoded = 0;
         nDecodedPkg = 0;
 
-        if(evalFrom<0) evalFrom = 0;
-        if(evalFrom>=packetNum) evalFrom = packetNum-1;
-        if(evalTo<0) evalTo = 0;
-        if(evalTo>=packetNum) evalTo = packetNum-1;
 
         decQueue = new ArrayQueue<CheckNode*>(BATSDECODER_MAXBATCH);
              
@@ -177,35 +173,55 @@ BatsDecoder(int M, int K, int T, SymbolType *output, bool noPrecode=false, long 
                 memset(it->packet[0], 0, packetSize);
             }
 
-            int nb, nc, nd;
-            for (int i = 0; i < dataActive; i++) {
-                nb = i / ldpcNum;
-                nc = i % ldpcNum;
-                for (int j = 0; j < ldpcVarDegree; j++) {
-                    nd = (nc + j * nb + j) % ldpcNum;
-                    BEdge* newEdge = batchSet[nd]->addEdge(&(var[i]), 1); 
-                    newEdge->g[0] = 1;
-                    newEdge->gh[0] = 1;
-                }
-            }
+            //int nb, nc, nd;
+            //for (int i = 0; i < dataActive; i++) {
+            //    nb = i / ldpcNum;
+            //    nc = i % ldpcNum;
+            //    for (int j = 0; j < ldpcVarDegree; j++) {
+            //        nd = (nc + j * nb + j) % ldpcNum;
+            //        BEdge* newEdge = batchSet[nd]->addEdge(&(var[i]), 1);
+            //        newEdge->g[0] = 1;
+            //        newEdge->gh[0] = 1;
+            //    }
+            //}
+
+            // read LDPC links from the LDPCstruct class - Added by Kairan Sun
+			for (int i = 0; i < dataActive; i++) {
+				for(set<int>::iterator it = ldpc->native2ldpc[i].begin(); it != ldpc->native2ldpc[i].end(); ++it){
+					BEdge* newEdge = batchSet[(*it)]->addEdge(&(var[i]), 1);
+					newEdge->g[0] = 1;
+					newEdge->gh[0] = 1;
+				}
+			}
+
             for (int i = 0; i < ldpcNum; i++) {
                 BEdge* newEdge = batchSet[i]->addEdge(&(var[i+packetNum]), 1);
                 newEdge->g[0] = 1;
                 newEdge->gh[0] = 1;
             }
             // add inactive edges in the end
-            for (int j = 0; j < ldpcNum; j++) {
-                for (int i = 0; i < 2; i++) {
-                    int k = layout->PerminactToActual((j + i) % (hdpcNum + additionalPerminactNum));
-                    BEdge* newEdge = batchSet[j]->addEdge(&(var[k]), 1);
-                    newEdge->g[0] = 1;
-                    newEdge->gh[0] = 1;
-                    batchSet[j]->inactCoef[0][var[k].inactSeq] = 1;
-                }
+            // not applicable for sliding window Raptor scheme
+            if((hdpcNum + additionalPerminactNum) > 0){
+				for (int j = 0; j < ldpcNum; j++) {
+					for (int i = 0; i < 2; i++) {
+						int k = layout->PerminactToActual((j + i) % (hdpcNum + additionalPerminactNum));
+						// Added by Kairan Sun for sliding window Raptor
+						if(!(ldpc->addNewEdgeBetweenNativeAndLdpc(k,j))) continue;
+						// end of addition
+						BEdge* newEdge = batchSet[j]->addEdge(&(var[k]), 1);
+						newEdge->g[0] = 1;
+						newEdge->gh[0] = 1;
+						batchSet[j]->inactCoef[0][var[k].inactSeq] = 1;
+					}
+				}
             }
         }
         // Added by Kairan - add the warm-up/cool-down packets in the front/back
-        if(evalTo > evalFrom) {
+        // if(evalFrom<0) evalFrom = 0;
+		// if(evalFrom>=packetNum) evalFrom = packetNum-1;
+		// if(evalTo<0) evalTo = 0;
+		// if(evalTo>=packetNum) evalTo = packetNum-1;
+        if( evalFrom < evalTo) {
         	// warm-up
         	int batchCnt = ldpcNum-1;
         	decQueue->empty();
@@ -243,7 +259,8 @@ BatsDecoder(int M, int K, int T, SymbolType *output, bool noPrecode=false, long 
 			}
         }
         else{
-			evalTo = evalFrom = 0;
+        	this->evalFrom = 0; // means all packets are evaluated
+			this->evalTo = totalNum - 1;
 		}
     }
 
@@ -275,6 +292,14 @@ BatsDecoder(int M, int K, int T, SymbolType *output, bool noPrecode=false, long 
     	return (complete_flag >= decRatio);
     }
 
+    inline double completeInEval(){
+    	return ((double)nDecodedPkginEval / (double)(evalTo - evalFrom + 1));
+    }
+
+    inline double completeInTime(){
+    	return ((double)nDecodedInTime / (double)(evalTo - evalFrom + 1));
+	}
+
     void rankDist(double* rd);
     void logRankDist();
 	//Number of times inactivation decoding is triggered
@@ -291,14 +316,15 @@ BatsDecoder(int M, int K, int T, SymbolType *output, bool noPrecode=false, long 
 		result = inactDec();
 
 		//if inactDecoding fail, we consider it needs more packets and retry inactDecoding again
-		double ratio = ((double) nDecodedPkg) / ((double)packetNum);
+
 		if(result) {
 			complete_flag = 1.0;
+			//nDecodedPkg = packetNum; // comment out to only count BP decoding results as decoded pkg number
+			//nDecodedPkginEval = evalTo - evalFrom + 1;
 		}
 		else {
-			complete_flag = ratio;
+			complete_flag = ((double) nDecodedPkg) / ((double)packetNum);
 		}
-
 		/* prepare for the next run */
 		accumulate_packets = 0;
 		return result;

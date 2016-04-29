@@ -4,6 +4,7 @@
 #include "PacketSampler.h"
 #include "IPacketBuilder.h"
 #include "Utilities.h"
+#include "LDPCStruct.h"
 
 #include <vector>
 #include <string>
@@ -22,6 +23,7 @@ class BatchBuilder {
 					int batchSize,
 					int randseed) :
 		sampler(lay),
+		ldpc(lay.GetLdpc()),
 		psrand(),
 		maxSparseDegree(maxSparseDegree),
 		perminactDegree(perminactDegree),
@@ -41,12 +43,18 @@ class BatchBuilder {
 			// added by Kairan for delay-aware fountain code
 			startPos = MIN(maxSparseDegree - 1, startPos);
 			windowSize = ComputeWindowSize(startPos, windowSize);
+			// added by Kairan for sliding window Ratpor codes
+			int* actualSeq;
+			windowSize = ldpc->getAcutalSeqWithLdpc(startPos, windowSize, &actualSeq);
+			// end of addition
 			degree = MIN(degree, windowSize);
 			
+
 			/* Step 2: Sample the packets */
 			// modified by Kairan for delay-aware fountain code
 		    double *CDF = ComputeCdf(windowSize, mode);
-			sampler.Sample(degree, perminactDegree, &psrand, startPos, windowSize, CDF);
+		    // modified by Kairan again for sliding window Raptor codes
+			sampler.Sample(degree, perminactDegree, &psrand, windowSize, CDF, actualSeq);
 			
 			/* Step 3: invoke packet builder */
 			for (int j = 0; j < batchSize; j++) {
@@ -159,6 +167,8 @@ class BatchBuilder {
 		//parameters
 		int maxSparseDegree, perminactDegree;
 		int batchSize;
+		// Added by Kairan for sliding window Raptor codes
+		LDPCStruct* ldpc;
 };
 
 #endif /* BATCHBUILDER_H */

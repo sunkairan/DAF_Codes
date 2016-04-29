@@ -201,6 +201,10 @@ void BatsDecoder::decodeBatch(){
 				{
 					nDecodedInTime++;
 				}
+				else{
+					nDecodedInTime++;
+					nDecodedInTime--;
+				}
 			}
 			
 
