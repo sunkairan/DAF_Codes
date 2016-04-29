@@ -1,5 +1,6 @@
 *.o
 *~
+.DS_Store
 /build/
 /results/
 /schfile/
